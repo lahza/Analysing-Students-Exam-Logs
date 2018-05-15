@@ -54,7 +54,7 @@ namespace FeatureExtraction
         private TimeSpan CalculateTimeSpaneOnItem(List<int> index, List<Snapshot> snapshotTable)
         {
             TimeSpan TimeSpanOnEachSanpshotForItem = new TimeSpan();
-            // calculating the time spent in each snapshot recorded before the final answer by sutracting the timstamp of a snapshot with the previous one
+            // calculating the time spent in each snapshot recorded before the final answer by subtracting the timestamp of a snapshot with the previous one
             foreach (var id in index) 
             {
                 var previoustItem = snapshotTable.SingleOrDefault(x => id - x.Index == 1);
@@ -93,7 +93,7 @@ namespace FeatureExtraction
             this.NumberOfMovementsThroughExam = numberOfMovements;
         }
         /// <summary>
-        /// 
+        /// General function that prepares the data for time calculation
         /// </summary>
         /// <param name="snapshotTable"></param>
         /// <param name="timeSabanList"></param>
@@ -105,9 +105,9 @@ namespace FeatureExtraction
             foreach (var allSnapshotsForOneItem in snapshotsGroupedByItem)
             {
                 List<int> indexOfsnapshotInSnapshotTable = new List<int>();
-                var snapOfFirstAnswerOfItem = allSnapshotsForOneItem.FirstOrDefault(); // Get the first answer that the student made on an item
+                var snapOfFirstAnswerOfItem = allSnapshotsForOneItem.FirstOrDefault();
                 var snapOfLastVisitOfItem = allSnapshotsForOneItem.LastOrDefault();
-                var snapOfFirstVisitOfFinalAnswerOfItem = snapOfFirstAnswerOfItem;  // Set the initial value of the snapshot that has the last value                 
+                var snapOfFirstVisitOfFinalAnswerOfItem = snapOfFirstAnswerOfItem;                   
 
                 switch (type)
                 {
@@ -120,7 +120,6 @@ namespace FeatureExtraction
                             continue;
                         }break;
                 }
-                // Find the snapshot that capture the last answer for the current item. Also build an index of all the current item's snapshot
                 foreach (var snapshot in allSnapshotsForOneItem)
                 {
                     if (snapshot.Responce != snapOfFirstVisitOfFinalAnswerOfItem.Responce)
@@ -138,7 +137,7 @@ namespace FeatureExtraction
             }
         }
         /// <summary>
-        /// This method return the average time a student spent on a question. Basicly, it calculates the time on each visit to the question recorded by the system from the first visit of the final answer until the visit in which the answer did not change after
+        /// This method returns the average time a student spent on a question. Basicly, it calculates the time on each visit to a question recorded by the system from the first visit of the final answer until the last visit to the question
         /// </summary>
         /// <param name="snapshotTable">List of all snapshots captured by the system for a student in the exam</param>
         public void AvgTimeOnItem(List<Snapshot> snapshotTable)
@@ -160,7 +159,7 @@ namespace FeatureExtraction
 
             foreach (var snapByItemNum in snapshotsGroupedByItem)
             {
-                var snapOfFirstAnswerOfItem = snapByItemNum.FirstOrDefault(x => !string.IsNullOrEmpty(x.Responce))/*add here another condition for a snapshot returend that is the response is not a guess*/;
+                var snapOfFirstAnswerOfItem = snapByItemNum.FirstOrDefault(x => !string.IsNullOrEmpty(x.Responce));
 
                 if (snapOfFirstAnswerOfItem != null)
                 {
@@ -194,7 +193,7 @@ namespace FeatureExtraction
             this.averageNumberOfTimesQuestionVesitedBeforFinalAnswer = indexNumOfTimesOfVisitBeforFinalAnswer.Average();
         }
         /// <summary>
-        /// 
+        /// Counting the total number of skips through the exam by checking the first visit to an item; if there is no answer in the first visit the function reports that as a skip 
         /// </summary>
         /// <param name="snapshotTable"></param>
         public void NumberOfSkips(List<Snapshot> snapshotTable)
@@ -206,7 +205,7 @@ namespace FeatureExtraction
             this.NumberOfSkipsThroughTheTest = skipCounter;
         }
         /// <summary>
-        /// 
+        /// Calculating Z-score
         /// </summary>
         /// <param name="questionWithTimeStudentSpentOn"></param>
         /// <param name="questionListWithStanderdDevAndAvg"></param>
@@ -220,7 +219,7 @@ namespace FeatureExtraction
             return zScore;
         }
         /// <summary>
-        /// 
+        /// If the time a student spent on answering aquetion was lower than the average, it is a guess 
         /// </summary>
         /// <param name="questionListWithStanderdDevAndAvg"></param>
         public void NumberOfItemsGuessed(Dictionary<string, double[]> questionListWithStanderdDevAndAvg)
@@ -242,7 +241,7 @@ namespace FeatureExtraction
             this.NumberOfQuestionGuessed = numberOfQuestionGuessed;
         }
         /// <summary>
-        /// 
+        /// If the time a student spent on answering aquetion was higher than the average, it is a guess 
         /// </summary>
         /// <param name="questionListWithStanderdDevAndAvg"></param>
         public void NumberOfItemsUncertain(Dictionary<string, double[]> questionListWithStanderdDevAndAvg)
@@ -264,7 +263,7 @@ namespace FeatureExtraction
             this.NumberOfQuestionUncertain = numberOfQuestionUncertain;
         }
         /// <summary>
-        /// For each question, this function compares the first answer with the final answer made by student
+        /// For each question, this function compares the first answer with the final answer made by a student
         /// </summary>
         /// <param name="snapshotTable"></param>
         public void CalcNumberOfItemsAnswresChanged(List<Snapshot> snapshotTable)
@@ -274,7 +273,6 @@ namespace FeatureExtraction
 
             foreach (var snapByItemNum in snapshotsGroupedByItem)
             {
-                // The next two lines get the first answer that the student made on an item, then get its index in the IGrouping list
                 var firstAnswer = snapByItemNum.FirstOrDefault(x => !string.IsNullOrEmpty(x.Responce));
                 var lastAnswer = snapByItemNum.LastOrDefault().Responce;
 
@@ -312,7 +310,7 @@ namespace FeatureExtraction
             this.PercentageOfQuestionsAswered = ((double)numberOfQuestionsAnswered / snapshotsGroupedByItem.Count())*100;
         }
         //Section one ends
-        /// Pergormance related features
+        /// Performance related features
         //Section Two starts        
         /// <summary>
         /// This function calculats the average time a student spent to answer a question correctly

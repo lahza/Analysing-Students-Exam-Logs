@@ -46,7 +46,7 @@ namespace FeatureExtraction
                 featureForEachStudent.studentId = student.Id;
                 featureForEachStudent.studentResult = student.Result;
                 
-                //Features generating starts
+                //Feature generating starts
                 featureForEachStudent.ClaculateNumberOfMovementsThroughExam(snapshot); // checked2
                 featureForEachStudent.AvgTimeOnItem(snapshot); //checked2
                 featureForEachStudent.AvgTimeOnReviewingItem(snapshot); //checked2
