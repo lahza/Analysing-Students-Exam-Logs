@@ -77,7 +77,7 @@ namespace FeatureExtraction
                 studentFeature.NumberOfItemsUncertain(questionListWithStanderdDevAndAvg); //checked
             }
             constructDataStruct.ExportToCsvFile(featureListForAllStudents);
-            visioConsole.ReadLine();
+            Console.ReadLine();
         }
     }
 }

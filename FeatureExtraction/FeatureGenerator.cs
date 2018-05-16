@@ -233,7 +233,7 @@ namespace FeatureExtraction
                 bool isSmallerThanAverage = averageTimeOntheQuestion - timeStudentSpentToAnswer > 0;
                 var zScore = ClaculteZScore(question, questionListWithStanderdDevAndAvg);
 
-                if (zScore > .8 && isSmallerThanAverage)
+                if (zScore > 1 && isSmallerThanAverage)
                 {
                     numberOfQuestionGuessed++;
                 }
