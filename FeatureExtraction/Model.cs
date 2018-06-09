@@ -14,7 +14,7 @@ namespace FeatureExtraction
         /// </summary>
         /// <param name="path">Where the data is located</param>
         /// <param name="students">An object of type student that has an id and a snapshot list</param>
-        public void ConstructStudent(string path, List<Student> students, Dictionary<string, string> studentResultsList)
+        public void ConstructStudent(string path, ref List<Student> students, Dictionary<string, string> studentResultsList)
         {
             int lastItem = students.Count;
             List<string> SplitLine(string line)
@@ -80,6 +80,24 @@ namespace FeatureExtraction
             }
         }
         /// <summary>
+        /// This function gets all the exam questions with the correct answers and stores them in a dectionary
+        /// </summary>
+        /// <param name="pathForCorrectAnswers">This is the directory path of the file that contains the questions and their correct answers</param>
+        /// <param name="correctAnswerList">The key is the question number and the value is the correct answer</param>
+        public void ConstructStudentGroup(string pathForStudentGroup, ref List<string> studentGroupIds)
+        {
+            using (var stream = new StreamReader(pathForStudentGroup))
+            {
+                string headerLine = stream.ReadLine();
+                string row;
+
+                while ((row = stream.ReadLine()) != null)
+                {
+                    studentGroupIds.Add(row);
+                }
+            }
+        }
+        /// <summary>
         /// This function exports the features extracted into a csv file
         /// </summary>
         /// <param name="featureListForAllStudents"> This is a list comprised of all students with their features</param>
@@ -89,20 +107,38 @@ namespace FeatureExtraction
             StringBuilder csv = new StringBuilder();
             csv.Append($"Student id, " +
                         $"% Result, " +
+                        $"% Total t, " +
                         $"Total Movements, " +
+                        $"Ran out of time?, " +
+                        $"Num of Right Ans of Las Five Q, " +
                         $"Avg t to Answering, " +
-                        $"Avg t to Reviewg, " +
+                        $"Avg t to Reviewg, " + 
+                        $"Avg t on Reviewing After Final Ans, " + 
+                        $"Avg t on Q, " +
                         $"Num Q Gussed, " +
+                        $"Num Q Gussed Based On Right Ans, " +
                         $"Num Q Uncertin, " +
+                        $"Num Q Uncertin Based On Right Ans, " +
+                        $"Num Q Ans Changed Compare F & L Ans, " +
                         $"Num Q Ans Changed, " +
+                        $"Num Q Ans Changed But Return First , " +
                         $"% Q Answered, " +
                         $"Avg Q Visits Before Final Ans, " +
+                        $"Avg Q Visits After First Ans, " +
+                        $"Avg Q Visits All Times, " +
+                        $"Avg Visits With Blanck Ans, " +
+                        $"Total Visits To Q, " +
                         $"Num Skips," +
                         $"Avg t Correct Ans, " +
                         $"Avg t Wrong Ans," +
-                        $"Num W to R," +
-                        $"Num R to W," +
-                        $"Num W to W \n");            
+                        $"Num W to R, " +
+                        $"Num R to W, " +
+                        $"Num W to W, " +
+                        $"Num R to W Compare F & L Ans, " +
+                        $"Num W to R Compare F & L Ans, " +
+                        $"Num W to W Compare F & L Ans, " +
+                        $"Num W Ans guessed, " +
+                        $"Num R to W to R\n");            
             foreach (var featuresForOneStudent in featureListForAllStudents)
             {
                 var features = featuresForOneStudent.PrepareForCsvFile();

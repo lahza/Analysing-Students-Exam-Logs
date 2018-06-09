@@ -13,7 +13,7 @@ namespace FeatureExtraction
         public string ItemType { set; get; }
         public string TimeStamp { set; get; }
         public string Trigger { set; get; }
-        public string Responce { set; get; }
+        public string Response { set; get; }
         public int Index { set; get; }
 
         public void AddRecord(List<string> line, int index)
@@ -23,7 +23,7 @@ namespace FeatureExtraction
             this.ItemType = line[3];
             this.TimeStamp = line[4];
             this.Trigger = line[5];
-            this.Responce = line[6];
+            this.Response = line[6];
             this.Index = index;
         }
     }
